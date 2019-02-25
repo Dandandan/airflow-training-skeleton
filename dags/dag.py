@@ -5,7 +5,6 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import BranchPythonOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
-import random
 
 dag = DAG(
     dag_id="hello_airflow",
@@ -64,10 +63,21 @@ branching = BranchPythonOperator(
     provide_context=True,
     dag=dag)
 
+from godatadriven.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
+
+pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
+    task_id="postgres_do_work",
+    postgres_conn_id="airflow-training-postgres",
+    sql="select * from land_registry_price_paid_uk WHERE tranfer_date = '{{ ds }}'",
+    bucket="airflowtraining",
+    filename="land_registry_price_paid_uk/{{ ds }}/land_registry_price.json",
+    dag=dag
+)
+
 end = DummyOperator(task_id="dummy", dag=dag, trigger_rule=TriggerRule.ONE_SUCCESS)
 
 print_execution_date >> [wait_1, wait_5, wait_10] >> print_op >> branching
 
 for name in weekday_person_to_email.values():
     email_task = DummyOperator(task_id="email_" + name, dag=dag)
-    branching >> email_task >> end
+    branching >> email_task >> pgsl_to_gcs
