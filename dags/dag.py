@@ -1,7 +1,7 @@
 import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
-from airflow.operators.dummy_operator DummyOperator
+from airflow.operators.dummy_operator import DummyOperator
 
 dag = DAG(
     dag_id="hello_airflow",
