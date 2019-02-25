@@ -2,6 +2,9 @@ import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python_operator import BranchPythonOperator
+
+import random
 
 dag = DAG(
     dag_id="hello_airflow",
@@ -29,7 +32,19 @@ wait_10 = BashOperator(
     task_id="wait_10", bash_command="wait 10", dag=dag
 )
 
+
+
+options = ['branch a', 'branch b', 'branch c', 'branch d']
+
+
+def random_branch():
+    random.choice(options)
+
+branching = BranchPythonOperator(
+    task_id= 'branching',
+    python_callable=random_branch,
+    dag=dag)
+
 end = DummyOperator(task_id="dummy", dag=dag)
 
-
-print_execution_date >> [ wait_1, wait_5, wait_10] >> end
+print_execution_date >> [ wait_1, wait_5, wait_10] >> branching >> end
