@@ -41,8 +41,11 @@ def send_to_slack_func(execution_date, **context):
     res = []
 
     for x in v1:
-        res.append(x[0].encode('utf-8'))
+        res.append("*" + x[0].encode('utf-8') + "*")
 
+    execution = execution_date.to_iso8601_string()
+
+    print(execution)
     op = SlackAPIPostOperator(
         task_id="slack_post",
         text=", ".join(res) + " were _really_ active last week! ",
