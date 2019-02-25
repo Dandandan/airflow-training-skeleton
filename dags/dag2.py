@@ -38,7 +38,7 @@ def send_to_slack_func(**context):
     print(v1)
     op = SlackAPIPostOperator(
         task_id="slack_post",
-        text=str(v1),
+        text=str(", ".join([x for x, y in v1]) + " were really active last week!"),
         username="Airflow",
         token=Variable.get("token"), dag=dag)
     op.execute(context=context)
