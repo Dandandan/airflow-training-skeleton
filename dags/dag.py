@@ -47,4 +47,5 @@ branching = BranchPythonOperator(
 
 end = DummyOperator(task_id="dummy", dag=dag)
 
-print_execution_date >> [ wait_1, wait_5, wait_10] >> branching >> end
+for option in options:
+    print_execution_date >> [ wait_1, wait_5, wait_10] >> branching >> option >> end
