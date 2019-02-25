@@ -20,15 +20,15 @@ print_execution_date = BashOperator(
 )
 
 wait_1 = BashOperator(
-    task_id="wait_1", bash_command="wait 1", dag=dag
+    task_id="wait_1", bash_command="sleep 1", dag=dag
 )
 
 wait_5 = BashOperator(
-    task_id="wait_5", bash_command="wait 5", dag=dag
+    task_id="wait_5", bash_command="sleep 5", dag=dag
 )
 
 wait_10 = BashOperator(
-    task_id="wait_10", bash_command="wait 10", dag=dag
+    task_id="wait_10", bash_command="sleep 10", dag=dag
 )
 
 options = ['branch_a', 'branch_b', 'branch_c', 'branch_d']
