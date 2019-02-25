@@ -48,7 +48,7 @@ def send_to_slack_func(execution_date, **context):
     print(execution)
     op = SlackAPIPostOperator(
         task_id="slack_post",
-        text=", ".join(res) + " were _really_ active last week! "  + str(execution),
+        text=", ".join(res) + " were _really_ active last week! " + str(execution),
         username="daniels_most_amazing_github_analyzer",
         icon_url="https://www.petmd.com/sites/default/files/Acute-Dog-Diarrhea-47066074.jpg",
         token=Variable.get("token"), dag=dag)
