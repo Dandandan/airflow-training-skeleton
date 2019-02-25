@@ -20,7 +20,7 @@ wait_5 = print_execution_date = BashOperator(
 )
 
 wait_10 = print_execution_date = BashOperator(
-    task_id="wait_1", bash_command="wait 10", dag=dag
+    task_id="wait_10", bash_command="wait 10", dag=dag
 )
 
 wait_1 = print_execution_date = BashOperator(
