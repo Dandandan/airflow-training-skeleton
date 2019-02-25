@@ -36,8 +36,9 @@ def send_to_slack_func(**context):
 
     v1 = ti.xcom_pull(key=None, task_ids='bq_fetch_data')
     print(v1)
-    SlackAPIPostOperator(
-        text="1234",
+    op = SlackAPIPostOperator(
+        task_id="slack_post",
+        text=str(v1),
         token="xoxp-559854890739-559228586160-560304790661-ae28d681f2f1026dd05cfc0a42f27d89", dag=dag)
 
 
@@ -48,4 +49,4 @@ send_to_slack = PythonOperator(
     dag=dag,
 )
 
-bq_fetch_data >> send_to_slack
+bq_fetch_data >> send_to_slack >> op
