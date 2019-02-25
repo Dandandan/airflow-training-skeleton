@@ -21,11 +21,11 @@ wait_1 = BashOperator(
 )
 
 
-wait_5 = print_execution_date = BashOperator(
+wait_5 = BashOperator(
     task_id="wait_5", bash_command="wait 5", dag=dag
 )
 
-wait_10 = print_execution_date = BashOperator(
+wait_10 = BashOperator(
     task_id="wait_10", bash_command="wait 10", dag=dag
 )
 
