@@ -49,8 +49,8 @@ weekday_person_to_email = {
 }
 
 
-def get_name(execution_date):
-    return weekday_person_to_email[execution_date.weekday()]
+def get_name(execution_date, **context):
+    return "email_" + weekday_person_to_email[execution_date.weekday()]
 
 
 print_op = PythonOperator(task_id="print_weekday",
@@ -61,6 +61,7 @@ print_op = PythonOperator(task_id="print_weekday",
 branching = BranchPythonOperator(
     task_id='branching',
     python_callable=get_name,
+    provide_context=True,
     dag=dag)
 
 end = DummyOperator(task_id="dummy", dag=dag)
