@@ -32,7 +32,7 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.models import Variable
 
 
-def send_to_slack_func(**context):
+def send_to_slack_func(execution_date, **context):
     ti = context['ti']
 
     v1 = ti.xcom_pull(key=None, task_ids='bq_fetch_data')
@@ -45,7 +45,7 @@ def send_to_slack_func(**context):
 
     op = SlackAPIPostOperator(
         task_id="slack_post",
-        text=str(", ".join(res) + " were _really_ active last week!"),
+        text=str(", ".join(res) + " were _really_ active last week! Date is: " + execution_date),
         username="daniels_most_amazing_github_analyzer",
         icon_url="https://www.petmd.com/sites/default/files/Acute-Dog-Diarrhea-47066074.jpg",
         token=Variable.get("token"), dag=dag)
