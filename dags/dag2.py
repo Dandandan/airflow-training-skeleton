@@ -49,4 +49,4 @@ send_to_slack = PythonOperator(
     dag=dag,
 )
 
-bq_fetch_data >> send_to_slack >> op
+bq_fetch_data >> send_to_slack
