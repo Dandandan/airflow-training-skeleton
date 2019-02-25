@@ -40,6 +40,7 @@ def send_to_slack_func(**context):
         task_id="slack_post",
         text=str(v1),
         token="xoxp-559854890739-559228586160-560304790661-ae28d681f2f1026dd05cfc0a42f27d89", dag=dag)
+    op.execute()
 
 
 send_to_slack = PythonOperator(
