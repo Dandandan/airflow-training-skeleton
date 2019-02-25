@@ -42,7 +42,7 @@ def send_to_slack_func(**context):
         username="daniel",
         #channel="#General",
         token="xoxp-559854890739-559228586160-561116849751-2c717700dd7b7a197765ac21770c9c08", dag=dag)
-    op.execute()
+    op.execute(context=context)
 
 
 send_to_slack = PythonOperator(
