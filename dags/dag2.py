@@ -38,7 +38,7 @@ def send_to_slack_func(**context):
     print(v1)
     op = SlackAPIPostOperator(
         task_id="slack_post",
-        text=str(", ".join([str(x) for x, y in v1]) + " were really active last week!"),
+        text=str(", ".join([x.decode("utf-8") for x, y in v1]) + " were really active last week!"),
         username="daniels_github_analyzer",
         token=Variable.get("token"), dag=dag)
     op.execute(context=context)
