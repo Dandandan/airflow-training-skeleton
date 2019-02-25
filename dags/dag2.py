@@ -41,9 +41,8 @@ def send_to_slack_func(**context):
     res = []
 
     for x in v1:
-        for name, _ in x:
-            print(name)
-            res.append(name.decode('utf-8', errors="replace"))
+        #print(x[0])
+        res.append(x[0].decode('utf-8', errors="replace"))
 
     op = SlackAPIPostOperator(
         task_id="slack_post",
