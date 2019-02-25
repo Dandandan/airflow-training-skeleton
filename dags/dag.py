@@ -3,6 +3,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import BranchPythonOperator
+from airflow.operators.python_operator import PythonOperator
 
 import random
 
@@ -33,15 +34,39 @@ wait_10 = BashOperator(
 options = ['branch_a', 'branch_b', 'branch_c', 'branch_d']
 
 
-def random_branch():
-    random.choice(options)
+def print_weekday(execution_date, **context):
+    print(execution_date.strftime("%A"))
 
+
+weekday_person_to_email = {
+    0: "Bob",
+    1: "Bob2",
+    2: "Bob3",
+    3: "Bob4",
+    4: "Bob5",
+    5: "Bob6",
+    6: "Bob7",
+}
+
+
+def get_name(execution_date):
+    return weekday_person_to_email[execution_date.weekday()]
+
+
+print_op = PythonOperator(task_id="print_weekday",
+                          python_callable=print_weekday,
+                          provide_context=True,
+                          dag=dag)
 
 branching = BranchPythonOperator(
     task_id='branching',
-    python_callable=random_branch,
+    python_callable=get_name,
     dag=dag)
 
 end = DummyOperator(task_id="dummy", dag=dag)
 
-print_execution_date >> [wait_1, wait_5, wait_10] >> branching >> [DummyOperator(task_id=option, dag=dag) for option in options] >> end
+print_execution_date >> [wait_1, wait_5, wait_10] >> print_op >> branching
+
+for name in weekday_person_to_email.values():
+    email_task = DummyOperator(task_id="email_" + name, dag=dag)
+    branching >> email_task >> end
