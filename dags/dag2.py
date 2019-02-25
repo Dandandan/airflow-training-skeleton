@@ -35,13 +35,11 @@ def send_to_slack_func(**context):
     ti = context['ti']
 
     v1 = ti.xcom_pull(key=None, task_ids='bq_fetch_data')
-    print(v1)
     res = []
 
     for x in v1:
         for name, _ in x:
-            res.append(name.decode("utf-8"))
-
+            res.append(name)
 
     op = SlackAPIPostOperator(
         task_id="slack_post",
