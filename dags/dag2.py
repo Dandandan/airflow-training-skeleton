@@ -36,9 +36,16 @@ def send_to_slack_func(**context):
 
     v1 = ti.xcom_pull(key=None, task_ids='bq_fetch_data')
     print(v1)
+    res = []
+
+    for x in v1:
+        for name, _ in x:
+            res.append(name.decode("utf-8"))
+
+
     op = SlackAPIPostOperator(
         task_id="slack_post",
-        text=str(", ".join([x.decode("utf-8") for x, y in v1]) + " were really active last week!"),
+        text=str(", ".join(res) + " were really active last week!"),
         username="daniels_github_analyzer",
         token=Variable.get("token"), dag=dag)
     op.execute(context=context)
