@@ -30,7 +30,7 @@ wait_10 = BashOperator(
     task_id="wait_10", bash_command="wait 10", dag=dag
 )
 
-options = ['branch a', 'branch b', 'branch c', 'branch d']
+options = ['branch_a', 'branch_b', 'branch_c', 'branch_d']
 
 
 def random_branch():
