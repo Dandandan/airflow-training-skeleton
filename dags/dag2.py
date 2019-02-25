@@ -7,7 +7,6 @@ from airflow.operators.slack_operator import SlackAPIPostOperator
 
 dag = DAG(
     dag_id='godatafest',
-    schedule_interval='@daily',
     default_args={
         'owner': 'GoDataDriven',
         'start_date': airflow.utils.dates.days_ago(2)
