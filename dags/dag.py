@@ -4,7 +4,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import BranchPythonOperator
 from airflow.operators.python_operator import PythonOperator
-
+from airflow.utils.trigger_rule import TriggerRule
 import random
 
 dag = DAG(
@@ -64,7 +64,7 @@ branching = BranchPythonOperator(
     provide_context=True,
     dag=dag)
 
-end = DummyOperator(task_id="dummy", dag=dag)
+end = DummyOperator(task_id="dummy", dag=dag, trigger_rule=TriggerRule.ONE_SUCCESS)
 
 print_execution_date >> [wait_1, wait_5, wait_10] >> print_op >> branching
 
