@@ -39,6 +39,8 @@ def send_to_slack_func(**context):
     op = SlackAPIPostOperator(
         task_id="slack_post",
         text=str(v1),
+        username="fokkodriesprong",
+        #channel="#General",
         token="xoxp-559854890739-559228586160-560368279685-30c1e30ee86fff97ccfcaee36719d845", dag=dag)
     op.execute()
 
