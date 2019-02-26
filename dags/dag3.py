@@ -94,12 +94,12 @@ compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates', main=
                                              cluster_name='analyse-pricing-{{ ds }}', arguments=[
         "gs://airflow-training-data/land_registry_price_paid_uk/{{ ds }}/*.json",
         "gs://airflow-training-data/currency/{{ ds }}/*.json", "gs://airflow-training-data/average_prices/{{ ds }}/"],
-                                             dag=dag, )
+                                             dag=dag)
 from airflow.utils.trigger_rule import TriggerRule
 
 dataproc_delete_cluster = DataprocClusterDeleteOperator(
     task_id="delete_dataproc", cluster_name="analyse-pricing-{{ ds }}", project_id="airflowbolcom-b01c3abbfb10e7ee",
-    trigger_rule=TriggerRule.ALL_DONE, dag=dag, )
+    trigger_rule=TriggerRule.ALL_DONE, dag=dag)
 
 http_op >> load_into_bigquery
 
