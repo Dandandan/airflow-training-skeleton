@@ -54,7 +54,7 @@ dag = DAG(
 
 http_ops = []
 
-for currency in ["EUR", "USD"]
+for currency in ["EUR", "USD"]:
     http_ops.append(HttpToGcsOperator(
         url='convert-currency?date={{ ds }}&from=GBP&to=EUR',
         bucket="airflow-daniel",
