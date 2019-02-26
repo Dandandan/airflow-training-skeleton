@@ -24,10 +24,10 @@ class HttpToGcsOperator(BaseOperator):
     ui_color = "#f4a460"
 
     @apply_defaults
-    def __init__(self, url, bucket, *args, **kwargs):
+    def __init__(self, url, bucket,file, *args, **kwargs):
         self.url = url
         self.bucket = bucket
-
+        self.file = file
         super(HttpToGcsOperator, self).__init__(*args, **kwargs)
 
     def execute(self, context):
@@ -41,7 +41,7 @@ class HttpToGcsOperator(BaseOperator):
 
         gcs = GoogleCloudStorageHook()
 
-        gcs.upload(self.bucket, "abc.json", named_file.name)
+        gcs.upload(self.bucket, self.file, named_file.name)
 
 
 dag = DAG(
@@ -52,11 +52,15 @@ dag = DAG(
     }
 )
 
-http_op = HttpToGcsOperator(
-    url='convert-currency?date={{ ds }}&from=GBP&to=EUR',
-    bucket="airflow-daniel",
-    task_id="conversion_rate",
-    dag=dag)
+http_ops = []
+
+for currency in ["EUR", "USD"]
+    http_ops.append(HttpToGcsOperator(
+        url='convert-currency?date={{ ds }}&from=GBP&to=EUR',
+        bucket="airflow-daniel",
+        file="currency/{{ ds }}/" + currency + ".json"
+        task_id="conversion_rate",
+        dag=dag))
 
 # pgsql_to_gcs = PostgresToGoogleCloudStorageOperator(
 #    task_id="postgres_job",
@@ -101,6 +105,6 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     task_id="delete_dataproc", cluster_name="analyse-pricing-{{ ds }}", project_id="airflowbolcom-b01c3abbfb10e7ee",
     trigger_rule=TriggerRule.ALL_DONE, dag=dag)
 
-http_op >> load_into_bigquery
+http_ops >> load_into_bigquery
 
-http_op >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
+http_ops >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
