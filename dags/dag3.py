@@ -32,7 +32,8 @@ class HttpToGcsOperator(BaseOperator):
         named_file = NamedTemporaryFile()
         http = HttpHook(method="GET")
         res = http.run(self.url)
-
+        print(self.url)
+        print(res.text)
         named_file.write(res.text)
 
         gcs = GoogleCloudStorageHook()
