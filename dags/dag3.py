@@ -41,8 +41,6 @@ class HttpToGcsOperator(BaseOperator):
 
         gcs.upload(self.bucket, "abc.json", named_file.name)
 
-        named_file.close()
-
 
 
 
