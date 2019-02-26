@@ -93,7 +93,7 @@ from airflow.contrib.operators.dataproc_operator import (DataprocClusterCreateOp
 dataproc_create_cluster = DataprocClusterCreateOperator(task_id="create_dataproc",
                                                         cluster_name="analyse-pricing-{{ ds }}",
                                                         project_id="airflowbolcom-b01c3abbfb10e7ee",
-                                                        num_workers=2, zone="europe-west4-a", dag=dag, )
+                                                        num_workers=2, zone="europe-west1", dag=dag, )
 compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates',
                                              main='gs://airflow-daniel/build_statistics.py',
                                              cluster_name='analyse-pricing-{{ ds }}', arguments=[
@@ -107,7 +107,7 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     trigger_rule=TriggerRule.ALL_DONE, dag=dag)
 
 write_to_bq = GoogleCloudStorageToBigQueryOperator(task_id="write_to_bq",
-                                                   bucket="airflow-training-data",
+                                                   bucket="airflow-daniel",
                                                    source_objects=["average_prices/transfer_date={{ ds }}/*"],
                                                    destination_project_dataset_table="airflow.airflow{{ ds_nodash }}",
                                                    source_format="PARQUET", write_disposition="WRITE_TRUNCATE",
