@@ -112,7 +112,6 @@ write_to_bq = GoogleCloudStorageToBigQueryOperator(task_id="write_to_bq",
                                                    destination_project_dataset_table="airflow.airflow{{ ds_nodash }}",
                                                    source_format="PARQUET", write_disposition="WRITE_TRUNCATE",
                                                    dag=dag, )
-http_ops >> load_into_bigquery
 pgsql_to_gcs >> load_into_bigquery
 
 pgsql_to_gcs >> dataproc_create_cluster
