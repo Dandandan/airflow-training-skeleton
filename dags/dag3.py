@@ -70,7 +70,7 @@ http_op = HttpToGcsOperator(
 load_into_bigquery = DataFlowPythonOperator(
     task_id="123",
     dataflow_default_options={},
-    py_file="gs://airflow-daniels/dataflow_job.py",
+    py_file="gs://airflow-daniel/dataflow_job.py",
     dag=dag)
 
 http_op >> load_into_bigquery
