@@ -13,7 +13,7 @@ dag = DAG(
 pgsql_to_gcs = PostgresToGoogleCloudStorageOperator(
     task_id="postgres_job",
     bucket="airflow-daniel",
-    sql="select * from land_registry_price_paid_uk limit 1",
-    filename="xxx.txt",
+    sql="select * from land_registry_price_paid_uk WHERE transfer_date = '{{ ds }}'",
+    filename="land_registry_price_paid_uk/{{ ds }}/land_registry_price.json",
     dag=dag
 )
