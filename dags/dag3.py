@@ -72,7 +72,8 @@ load_into_bigquery = DataFlowPythonOperator(
     dataflow_default_options={
         'region': 'europe-west1',
         'input': 'gs://airflow-daniel/*/*.json',
-        'temp_location': 'gs://airflow-daniel/staging',
+        'temp_location': 'gs://airflow-daniel/tmp',
+        'staging_location': 'gs://airflow-daniel/staging',
         'table': 'airflow',
         'project': 'airflowbolcom-b01c3abbfb10e7ee',
         'bucket': 'gs://airflow-daniel',
