@@ -81,7 +81,7 @@ load_into_bigquery = DataFlowPythonOperator(
         'table': 'airflow',
         'dataset': 'airflow',
         'project': 'airflowbolcom-b01c3abbfb10e7ee',
-        'bucket': 'europe-west1-training-airfl-bb0beabe-bucket',
+        'bucket': 'europe-west1-training-airfl-bb0beabce-bucket',
         'job_name': '{{ task_instance_key_str }}'
     },
     py_file="gs://airflow-daniel/dataflow_job.py",
@@ -108,7 +108,7 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
 
 write_to_bq = GoogleCloudStorageToBigQueryOperator(task_id="write_to_bq",
                                                    bucket="airflow-daniel",
-                                                   source_objects=["average_prices/transfer_date={{ ds }}/*"],
+                                                   source_objects=["average_prices/{{ ds }}/*"],
                                                    destination_project_dataset_table="airflow.airflow{{ ds_nodash }}",
                                                    source_format="PARQUET", write_disposition="WRITE_TRUNCATE",
                                                    dag=dag, )
