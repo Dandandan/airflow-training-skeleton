@@ -8,7 +8,7 @@ from airflow.hooks.http_hook import HttpHook
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
-import
+
 
 class HttpToGcsOperator(BaseOperator):
     """
