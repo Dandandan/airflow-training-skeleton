@@ -18,13 +18,13 @@ class HttpToGcsOperator(BaseOperator):
 
     """
 
-    template_fields = ('url', 'bucket')
+    template_fields = ('url', 'file', 'bucket')
     template_ext = ()
 
     ui_color = "#f4a460"
 
     @apply_defaults
-    def __init__(self, url, bucket,file, *args, **kwargs):
+    def __init__(self, url, bucket, file, *args, **kwargs):
         self.url = url
         self.bucket = bucket
         self.file = file
@@ -94,7 +94,8 @@ dataproc_create_cluster = DataprocClusterCreateOperator(task_id="create_dataproc
                                                         cluster_name="analyse-pricing-{{ ds }}",
                                                         project_id="airflowbolcom-b01c3abbfb10e7ee",
                                                         num_workers=2, zone="europe-west4-a", dag=dag, )
-compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates', main='gs://airflow-daniel/build_statistics.py',
+compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates',
+                                             main='gs://airflow-daniel/build_statistics.py',
                                              cluster_name='analyse-pricing-{{ ds }}', arguments=[
         "gs://airflow-daniel/land_registry_price_paid_uk/{{ ds }}/*.json",
         "gs://airflow-daniel/currency/{{ ds }}/*.json", "gs://airflow-training-data/average_prices/{{ ds }}/"],
