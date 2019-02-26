@@ -83,22 +83,24 @@ load_into_bigquery = DataFlowPythonOperator(
     py_file="gs://airflow-daniel/dataflow_job.py",
     dag=dag)
 
+from airflow.contrib.operators.dataproc_operator import (DataprocClusterCreateOperator, DataprocClusterDeleteOperator,
+                                                         DataProcPySparkOperator, )
+
+dataproc_create_cluster = DataprocClusterCreateOperator(task_id="create_dataproc",
+                                                        cluster_name="analyse-pricing-{{ ds }}",
+                                                        project_id="airflowbolcom-b01c3abbfb10e7ee",
+                                                        num_workers=2, zone="europe-west4-a", dag=dag, )
+compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates', main='gs://gdd-training/build_statistics.py',
+                                             cluster_name='analyse-pricing-{{ ds }}', arguments=[
+        "gs://airflow-training-data/land_registry_price_paid_uk/{{ ds }}/*.json",
+        "gs://airflow-training-data/currency/{{ ds }}/*.json", "gs://airflow-training-data/average_prices/{{ ds }}/"],
+                                             dag=dag, )
+from airflow.utils.trigger_rule import TriggerRule
+
+dataproc_delete_cluster = DataprocClusterDeleteOperator(
+    task_id="delete_dataproc", cluster_name="analyse-pricing-{{ ds }}", project_id="airflowbolcom-b01c3abbfb10e7ee",
+    trigger_rule=TriggerRule.ALL_DONE, dag=dag, )
+
 http_op >> load_into_bigquery
 
-# from airflow.contrib.operators.dataproc_operator import (DataprocClusterCreateOperator, DataprocClusterDeleteOperator,
-#                                                          DataProcPySparkOperator, )
-#
-# dataproc_create_cluster = DataprocClusterCreateOperator(task_id="create_dataproc",
-#                                                         cluster_name="analyse-pricing-{{ ds }}",
-#                                                         project_id="airflowbolcom-b01c3abbfb10e7ee",
-#                                                         num_workers=2, zone="europe-west4-a", dag=dag, )
-# compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates', main='gs://gdd-training/build_statistics.py',
-#                                              cluster_name='analyse-pricing-{{ ds }}', arguments=[
-#         "gs://airflow-training-data/land_registry_price_paid_uk/{{ ds }}/*.json",
-#         "gs://airflow-training-data/currency/{{ ds }}/*.json", "gs://airflow-training-data/average_prices/{{ ds }}/"],
-#                                              dag=dag, )
-# from airflow.utils.trigger_rule import TriggerRule
-#
-# dataproc_delete_cluster = DataprocClusterDeleteOperator(
-#     task_id="delete_dataproc", cluster_name="analyse-pricing-{{ ds }}", project_id="airflowbolcom-b01c3abbfb10e7ee",
-#     trigger_rule=TriggerRule.ALL_DONE, dag=dag, )
+http_op >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
