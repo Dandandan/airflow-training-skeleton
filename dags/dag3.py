@@ -51,7 +51,7 @@ dag = DAG(
 )
 
 http_op = HttpToGcsOperator(
-    url="https://us-central1-umcg-cardio-ai.cloudfunctions.net/convert-currency?date=2018-01-01&from=GBP&to=EUR",
+    url="convert-currency?date={{ ds }}&from=GBP&to=EUR",
     bucket="airflow-daniel",
     task_id="conversion_rate",
     dag=dag)
