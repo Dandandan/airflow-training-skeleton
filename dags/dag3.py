@@ -63,14 +63,13 @@ for currency in ["EUR", "USD"]:
         task_id="conversion_rate_" + currency,
         dag=dag))
 
-# pgsql_to_gcs = PostgresToGoogleCloudStorageOperator(
-#    task_id="postgres_job",
-#    bucket="airflow-daniel",
-#    sql="select * from land_registry_price_paid_uk WHERE transfer_date = '{{ ds }}'",
-#    filename="land_registry_price_paid_uk/{{ ds }}/land_registry_price.json",
-#    dag=dag
-# )
-
+pgsql_to_gcs = PostgresToGoogleCloudStorageOperator(
+    task_id="postgres_job",
+    bucket="airflow-daniel",
+    sql="select * from land_registry_price_paid_uk WHERE transfer_date = '{{ ds }}'",
+    filename="land_registry_price_paid_uk/{{ ds }}/land_registry_price.json",
+    dag=dag
+)
 
 load_into_bigquery = DataFlowPythonOperator(
     task_id="bqjob",
@@ -114,6 +113,6 @@ write_to_bq = GoogleCloudStorageToBigQueryOperator(task_id="write_to_bq",
                                                    source_format="PARQUET", write_disposition="WRITE_TRUNCATE",
                                                    dag=dag, )
 
-http_ops >> load_into_bigquery
+[pgsql_to_gcs, http_ops] >> load_into_bigquery
 
 http_ops >> dataproc_create_cluster >> compute_aggregates >> [dataproc_delete_cluster, write_to_bq]
