@@ -108,7 +108,7 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
 
 write_to_bq = GoogleCloudStorageToBigQueryOperator(task_id="write_to_bq",
                                                    bucket="airflow-daniel",
-                                                   source_objects=["average_prices/{{ ds }}/*"],
+                                                   source_objects=["average_prices/{{ ds }}/*.parquet"],
                                                    destination_project_dataset_table="airflow.airflow{{ ds_nodash }}",
                                                    source_format="PARQUET", write_disposition="WRITE_TRUNCATE",
                                                    dag=dag, )
