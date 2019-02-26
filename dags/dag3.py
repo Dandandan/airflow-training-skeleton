@@ -12,8 +12,8 @@ dag = DAG(
 
 pgsql_to_gcs = PostgresToGoogleCloudStorageOperator(
     task_id="postgres_job",
-    bucket="gs://airflow-dheres",
+    bucket="airflow-dheres",
     sql="select * from land_registry_price_paid_uk",
-    filename="xxx.json",
+    filename="xxx.txt",
     dag=dag
 )
