@@ -75,7 +75,7 @@ load_into_bigquery = DataFlowPythonOperator(
     task_id="bqjob",
     dataflow_default_options={
         'region': 'europe-west1',
-        'input': 'gs://airflow-daniel/*/*.json',
+        'input': 'gs://airflow-daniel/land_registry_price_paid_uk/*/*.json',
         'temp_location': 'gs://airflow-daniel/tmp',
         'staging_location': 'gs://airflow-daniel/staging',
         'table': 'airflow',
