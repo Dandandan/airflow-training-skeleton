@@ -58,7 +58,7 @@ for currency in ["EUR", "USD"]
     http_ops.append(HttpToGcsOperator(
         url='convert-currency?date={{ ds }}&from=GBP&to=EUR',
         bucket="airflow-daniel",
-        file="currency/{{ ds }}/" + currency + ".json"
+        file="currency/{{ ds }}/" + currency + ".json",
         task_id="conversion_rate",
         dag=dag))
 
