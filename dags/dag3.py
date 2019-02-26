@@ -96,8 +96,8 @@ dataproc_create_cluster = DataprocClusterCreateOperator(task_id="create_dataproc
                                                         num_workers=2, zone="europe-west4-a", dag=dag, )
 compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates', main='gs://airflow-daniel/build_statistics.py',
                                              cluster_name='analyse-pricing-{{ ds }}', arguments=[
-        "gs://airflow-training-data/land_registry_price_paid_uk/{{ ds }}/*.json",
-        "gs://airflow-training-data/currency/{{ ds }}/*.json", "gs://airflow-training-data/average_prices/{{ ds }}/"],
+        "gs://airflow-daniel/land_registry_price_paid_uk/{{ ds }}/*.json",
+        "gs://airflow-daniel/currency/{{ ds }}/*.json", "gs://airflow-training-data/average_prices/{{ ds }}/"],
                                              dag=dag)
 from airflow.utils.trigger_rule import TriggerRule
 
