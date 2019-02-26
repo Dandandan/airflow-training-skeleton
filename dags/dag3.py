@@ -68,7 +68,7 @@ http_op = HttpToGcsOperator(
 
 
 load_into_bigquery = DataFlowPythonOperator(
-    task_id="123",
+    task_id="bqjob",
     dataflow_default_options={
         'region': 'europe-west1',
         'input': 'gs://airflow-daniel/*/*.json',
