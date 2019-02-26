@@ -1,3 +1,5 @@
+from airflow.contrib.operators.dataflow_operator import DataFlowPythonOperator
+
 from airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 import airflow
 from airflow import DAG
@@ -42,8 +44,6 @@ class HttpToGcsOperator(BaseOperator):
         gcs.upload(self.bucket, "abc.json", named_file.name)
 
 
-
-
 dag = DAG(
     dag_id='real_estate',
     default_args={
@@ -65,3 +65,12 @@ http_op = HttpToGcsOperator(
 #    filename="land_registry_price_paid_uk/{{ ds }}/land_registry_price.json",
 #    dag=dag
 # )
+
+
+load_into_bigquery = DataFlowPythonOperator(
+    task_id="123",
+    dataflow_default_options={},
+    py_file="gs://airflow-daniels/dataflow_job.py",
+    dag=dag)
+
+http_op >> load_into_bigquery
