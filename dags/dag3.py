@@ -98,7 +98,7 @@ compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates',
                                              main='gs://airflow-daniel/build_statistics.py',
                                              cluster_name='analyse-pricing-{{ ds }}', arguments=[
         "gs://airflow-daniel/land_registry_price_paid_uk/{{ ds }}/*.json",
-        "gs://airflow-daniel/currency/{{ ds }}/*.json", "gs://airflow-training-data/average_prices/{{ ds }}/"],
+        "gs://airflow-daniel/currency/{{ ds }}/*.json", "gs://airflow-daniel/average_prices/{{ ds }}/"],
                                              dag=dag)
 from airflow.utils.trigger_rule import TriggerRule
 
