@@ -10,6 +10,7 @@ from airflow.hooks.http_hook import HttpHook
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
+from airflow_training.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 
 
 class HttpToGcsOperator(BaseOperator):
@@ -106,6 +107,13 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     task_id="delete_dataproc", cluster_name="analyse-pricing-{{ ds }}", project_id="airflowbolcom-b01c3abbfb10e7ee",
     trigger_rule=TriggerRule.ALL_DONE, dag=dag)
 
+write_to_bq = GoogleCloudStorageToBigQueryOperator(task_id="write_to_bq",
+                                                   bucket="airflow-training-data",
+                                                   source_objects=["average_prices/transfer_date={{ ds }}/*"],
+                                                   destination_project_dataset_table="airflow:airflow{{ ds_nodash }}",
+                                                   source_format="PARQUET", write_disposition="WRITE_TRUNCATE",
+                                                   dag=dag, )
+
 http_ops >> load_into_bigquery
 
-http_ops >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
+http_ops >> dataproc_create_cluster >> compute_aggregates >> [dataproc_delete_cluster, write_to_bq]
