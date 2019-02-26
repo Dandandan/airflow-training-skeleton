@@ -69,7 +69,15 @@ http_op = HttpToGcsOperator(
 
 load_into_bigquery = DataFlowPythonOperator(
     task_id="123",
-    dataflow_default_options={},
+    dataflow_default_options={
+        'region': 'europe-west1',
+        'input': 'gs://airflow-daniel/*/*.json',
+        'temp_location': 'gs://airflow-daniel/staging',
+        'table': 'airflow',
+        'project': 'airflowbolcom-b01c3abbfb10e7ee',
+        'bucket': 'airflow-daniel',
+        'name': '{{ task_instance_key_str }}'
+    },
     py_file="gs://airflow-daniel/dataflow_job.py",
     dag=dag)
 
