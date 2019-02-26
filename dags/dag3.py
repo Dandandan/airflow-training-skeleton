@@ -33,7 +33,7 @@ class HttpToGcsOperator(BaseOperator):
         http = HttpHook(method="GET")
         res = http.run(self.url)
 
-        named_file.write(res.json())
+        named_file.write(str(res.json()))
 
         gcs = GoogleCloudStorageHook()
 
