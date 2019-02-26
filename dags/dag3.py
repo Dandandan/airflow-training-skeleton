@@ -26,7 +26,7 @@ class HttpToGcsOperator(BaseOperator):
         self.url = url
         self.bucket = bucket
 
-        super(HttpToGcsOperator, self).__init__()
+        super(HttpToGcsOperator, self).__init__(*args, **kwargs)
 
     def execute(self, context):
         named_file = NamedTemporaryFile()
