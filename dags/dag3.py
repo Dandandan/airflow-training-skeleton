@@ -16,7 +16,7 @@ class HttpToGcsOperator(BaseOperator):
 
     """
 
-    template_fields = ('endpoint', 'gcs_path')
+    template_fields = ('url', 'bucket')
     template_ext = ()
 
     ui_color = "#f4a460"
