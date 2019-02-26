@@ -93,7 +93,7 @@ from airflow.contrib.operators.dataproc_operator import (DataprocClusterCreateOp
 dataproc_create_cluster = DataprocClusterCreateOperator(task_id="create_dataproc",
                                                         cluster_name="analyse-pricing-{{ ds }}",
                                                         project_id="airflowbolcom-b01c3abbfb10e7ee",
-                                                        num_workers=2, zone="europe-west1", dag=dag, )
+                                                        num_workers=2, zone="europe-west4-a", dag=dag, )
 compute_aggregates = DataProcPySparkOperator(task_id='compute_aggregates',
                                              main='gs://airflow-daniel/build_statistics.py',
                                              cluster_name='analyse-pricing-{{ ds }}', arguments=[
