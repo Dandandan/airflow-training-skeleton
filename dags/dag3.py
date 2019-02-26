@@ -35,12 +35,13 @@ class HttpToGcsOperator(BaseOperator):
         print(self.url)
         print(res.text)
         named_file.write(res.text)
+        named_file.close()
 
         gcs = GoogleCloudStorageHook()
 
         gcs.upload(self.bucket, "abc.json", named_file.name)
 
-        named_file.close()
+
 
 
 dag = DAG(
