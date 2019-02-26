@@ -115,4 +115,6 @@ write_to_bq = GoogleCloudStorageToBigQueryOperator(task_id="write_to_bq",
 
 [pgsql_to_gcs, http_ops] >> load_into_bigquery
 
-[http_ops, pgsql_to_gcs] >> dataproc_create_cluster >> compute_aggregates >> [dataproc_delete_cluster, write_to_bq]
+pgsql_to_gcs >> dataproc_create_cluster
+
+http_ops >> dataproc_create_cluster >> compute_aggregates >> [dataproc_delete_cluster, write_to_bq]
