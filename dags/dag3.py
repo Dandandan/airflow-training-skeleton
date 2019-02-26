@@ -82,7 +82,7 @@ load_into_bigquery = DataFlowPythonOperator(
         'dataset': 'airflow',
         'project': 'airflowbolcom-b01c3abbfb10e7ee',
         'bucket': 'europe-west1-training-airfl-bb0beabe-bucket',
-        'name': '{{ task_instance_key_str }}'
+        'job_name': '{{ task_instance_key_str }}'
     },
     py_file="gs://airflow-daniel/dataflow_job.py",
     dag=dag)
