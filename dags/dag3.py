@@ -75,7 +75,7 @@ load_into_bigquery = DataFlowPythonOperator(
         'temp_location': 'gs://airflow-daniel/staging',
         'table': 'airflow',
         'project': 'airflowbolcom-b01c3abbfb10e7ee',
-        'bucket': 'airflow-daniel',
+        'bucket': 'gs://airflow-daniel',
         'name': '{{ task_instance_key_str }}'
     },
     py_file="gs://airflow-daniel/dataflow_job.py",
